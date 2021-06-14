@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>سامانه آزمون کاف</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body dir="rtl">
+  <nav class=" nav navbar navbar-expand-md">
+    <h4 class="pt-3 pb-3"> سامانه آزمون کاف</h4>
+    <img class="img logo mr-auto" src="./kaf.jpg">
+  </nav>
+  <div class="container" id="_container">
+    <div class="row">
+      <div class="col-lg-6  col-md-12 p-6 loginForm">
+        <div class="row my-5">
+          <h5 class="mr-5">ورود به سامانه چت </h5>
+        </div>
+        <form action="#" class="form">
+          <div class="form-group ">
+            <div class="alert alert-warning text-center" id="alert" style="visibility: hidden;"> </div>
+          </div>
+          <div class="form-group ">
+            <input class="form-control" id="name" type="text" placeholder="نام کاربری" required />
+          </div>
+          <div class="form-group">
+            <input class="form-control" id="password" type="password" placeholder="رمز عبور" required />
+            <a class="btn mr-1 mt-2 float-right text-primary" href="#"> فراموشی رمز عبور </a>
+          </div>
+          <a type="submit" class="btn btn-md btn-primary" style="padding-bottom: 0.7rem;min-width: 80px;color: white;" onclick="register()"> ثبت نام </a>
+          <a type="submit" class="btn btn-md btn-success" style="padding-bottom: 0.7rem;min-width: 80px;" onclick="login()"> ورود </a>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="chat-container" id="chat_container" style="display: none;">
+    <header class="chat-header">
+      <a class="btn2 btn_exit" onClick="logout()"> <i class="fas fa-window-close"></i> خروج </a>
+      <h1 class="chat_head"><i class="fas fa-smile"></i> K . A . F Chat </h1>
+    </header>
+    <main class="chat-main">
+      <div class="chat-sidebar">
+        <input id="from" type="text" placeholder="نام خودتان را بنویسید" required />
+        <input id="to" type="text" placeholder="نام گیرنده پیام را بنویسید ..." required />
+        <button class="btn2" onclick="storeDetails()"><i class="fas fa-paper-plane"></i> تایید </button>
+      </div>
+      <div class="chat-messages">
+        <div class="message"></div>
+      </div>
+    </main>
+    <div class="chat-form-container">
+      <form id="chat-form" onsubmit="event.preventDefault();" action="">
+        <input id="msg" type="text" placeholder="متن پیام را بنویسید" required autocomplete="off" />
+        <button class="btn send_btn"><i class="fas fa-paper-plane"></i> ارسال</button>
+      </form>
+    </div>
+  </div>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  socket = io();
+  let userName;
+  function register() {
+    localStorage.clear();
+    document.getElementById("alert").style.visibility = "hidden";
+    document.getElementById("alert").innerHTML = "";
+    var name = document.getElementById('name').value;
+    var password = document.getElementById('password').value;
+    socket.emit('setUsername', {
+      name: name,
+      password: password
+    });
+  };
+  function login() {
+    localStorage.clear();
+    document.getElementById("alert").style.visibility = "hidden";
+    document.getElementById("alert").innerHTML = "";
+    var name = document.getElementById('name').value;
+    var password = document.getElementById('password').value;
+    socket.emit('authenticate', {
+      name: name,
+      password: password
+    });
+  };
+  function logout() {
+    localStorage.clear();
+    location.reload();
+  };
+  socket.on('notAuthenticated', function (data) {
+    document.getElementById("alert").style.visibility = "visible";
+    document.getElementById("alert").innerHTML = data;
+  });
+  socket.on('userExists', function (data) {
+    document.getElementById("alert").style.visibility = "visible";
+    document.getElementById("alert").innerHTML = data;
+  });
+  let fromUser = "John";
+  let toUser = "";
+  socket.on('userSet', function (data) {
+    ok = data.ok;
+    if (ok == 1) {
+      localStorage.setItem('userid', data.data.ID);
+      localStorage.setItem('username', data.data.name);
+      document.getElementById("_container").style.display = "none";
+      document.getElementById("chat_container").style.display = "block";
+      fromUser = data.data.name;
+      userName = data.data.name;
+      document.getElementById('from').value = data.data.name;
+    } else {
+      document.getElementById("_container").style.display = "block";
+      document.getElementById("chat_container").style.display = "none";
+    }
+  });
+  document.onreadystatechange = () => {
+    if (document.readyState === 'complete') {
+      // document ready
+      if (localStorage.getItem("userid") != "undefined" && localStorage.getItem("userid") != null) {
+        document.getElementById("_container").style.display = "none";
+        document.getElementById("chat_container").style.display = "block";
+        fromUser = localStorage.getItem("userid");
+        userName = localStorage.getItem("username");
+        document.getElementById('from').value = userName;
+      } else {
+        document.getElementById("_container").style.display = "block";
+        document.getElementById("chat_container").style.display = "none";
+      }
+    }
+  };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.4/qs.min.js" integrity="sha256-ijqLssetA1NMNjZ+w1zaUafQQLm4IW5OoM8O+4tatME=" crossorigin="anonymous">
+</script>
+<script src="js/main.js"></script>
+</html>

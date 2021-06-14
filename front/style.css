@@ -1,0 +1,22 @@
+.nav{
+    background: #4682B4 ;
+}
+.img.logo{
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+}
+.img-1{
+    width: 169px;
+    margin: 43px;
+}
+.div-1{
+    border-color: gainsboro;
+    border-style: solid;
+}
+.th-1{
+    text-align: center;
+}
+.btn-1{
+    background-color: darkslateblue;
+}
