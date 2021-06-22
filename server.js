@@ -12,17 +12,11 @@ var funaClient = new faunaDB.Client({ secret: process.env.FUNA_KEY });
 const dbname = "chatApp";
 const chatCollection = "chats"; //collection to store all chats
 const userCollection = "onlineUsers"; //collection to maintain list of currently online users
-const port = 5000;
+const port = 3000;
 const database = "mongodb://localhost:27017/";
 const app = express();
 const server = http.createServer(app);
-const io = socketio(server, {
-  cors: {
-    origin: "http://localhost:5000",
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-});
+const io = socketio(server);
 // server css as static
 app.use(express.static(__dirname));
 // initialize body-parser to parse incoming parameters requests to req.body
