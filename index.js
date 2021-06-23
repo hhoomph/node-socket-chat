@@ -22,10 +22,10 @@ const io = socketio(server);
 app.use(express.static(__dirname));
 // initialize body-parser to parse incoming parameters requests to req.body
 app.use(bodyParser.urlencoded({ extended: true }));
-app.get("/index.html", (req, res) => {
+app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
 });
-app.get("/", (req, res) => {
+app.get("/index.html", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
 });
 app.use(express.static(path.join(__dirname, "public")));
@@ -222,7 +222,6 @@ io.on("connection", (socket) => {
       .catch((err) => console.error("Error: %s", err));
   });
 });
-// server.listen(port, () => {
-//   console.log(`Chat Server listening to port ${port}...`);
-// });
-server.listen(port);
+server.listen(port, () => {
+  console.log(`Chat Server listening to port ${port}...`);
+});
