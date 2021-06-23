@@ -12,7 +12,7 @@ var funaClient = new faunaDB.Client({ secret: process.env.FUNA_KEY });
 const dbname = "chatApp";
 const chatCollection = "chats"; //collection to store all chats
 const userCollection = "onlineUsers"; //collection to maintain list of currently online users
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 const database = "mongodb://localhost:27017/";
 const app = express();
 const server = http.createServer(app);
@@ -22,12 +22,12 @@ app.use(express.static(__dirname));
 // initialize body-parser to parse incoming parameters requests to req.body
 app.use(bodyParser.urlencoded({ extended: true }));
 app.get("/index.html", (req, res) => {
-  res.sendFile(__dirname + "/front/index.html");
+  res.sendFile(__dirname + "/public/index.html");
 });
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/front/index.html");
+  res.sendFile(__dirname + "/public/index.html");
 });
-app.use(express.static(path.join(__dirname, "front")));
+app.use(express.static(path.join(__dirname, "public")));
 // route for handling 404 requests(unavailable routes)
 app.use(function (req, res, next) {
   res.status(404).send("شرمنده چیزی پیدا نشد!!!");

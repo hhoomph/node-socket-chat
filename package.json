@@ -5,10 +5,10 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server",
-    "dev": "nodemon server"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
-  "author": "Neelabh Sinha",
+  "author": "hhoomph",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
