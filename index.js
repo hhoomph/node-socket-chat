@@ -15,7 +15,8 @@ const userCollection = "onlineUsers"; //collection to maintain list of currently
 const port = process.env.PORT || 3000;
 const database = "mongodb://localhost:27017/";
 const app = express();
-const server = http.createServer(app);
+// const server = http.createServer(app);
+const server = app.listen(process.env.PORT || 3000);
 const io = socketio(server);
 // server css as static
 app.use(express.static(__dirname));
