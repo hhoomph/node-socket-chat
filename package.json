@@ -1,8 +1,8 @@
 {
-  "name": "chat-application",
+  "name": "node-socket-chat",
   "version": "1.0.0",
   "description": "Creating a Chat Application using Node.js, Express, Socket.io, MongoDB and HTML & CSS",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
